@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #004080;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .filters {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .filters select, .filters input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #004080;
+            color: white;
+        }
+        .action-btn {
+            background-color: #004080;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .action-btn:hover {
+            background-color: #1a73e8;
+        }
+        .resPara{
+            text-align: center;
+            font-size: 40px;
+        }
+        .navbar {
+            background-color: #004080;
+            overflow: hidden;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+        .navbar a:hover {
+            background-color: #575757;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-left">
+            <a href="FacultyPage.html">Home</a>
+            <a href="workUpdate.html">Work Update</a>
+            <a href="#">Reports</a>
+            <a href="#">Notifications</a>
+        </div>
+        <div class="nav-right">
+            <a href="#">Profile</a>
+            <a href="#">feedback</a>
+            <a href="#">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="filters">
+            <select id="category-filter">
+                <option value="">Select Year</option>
+                <option value="generalWork">2024</option>
+                <option value="meetings">2023</option>
+                <option value="examinations">2022</option>
+            </select>
+            <select id="semester-filter">
+                <option value="">Select Semester</option>
+                <option value="sem1">Semester 1</option>
+                <option value="sem2">Semester 2</option>
+                <!-- Add more semesters -->
+            </select>            
+            <button class="action-btn" onclick="fetchReports()">Fetch</button>
+        </div>
+
+        <div class="resPara">Results</div>
+    </div>
+</body>
+</html>

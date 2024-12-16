@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #004080;
+            overflow: hidden;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+        .navbar a:hover {
+            background-color: #4e2c2c;
+        }
+        .main {
+            display: flex;
+            margin: 20px;
+        }
+        .left-panel, .right-panel {
+            flex: 1;
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="nav-left">
+            <a href="FacultyPage.html">Home</a>
+            <a href="workUpdate.html">Work Update</a>
+            <a href="reports2.html">Reports</a>
+            <a href="#">Notifications</a>
+        </div>
+        <div class="nav-right">
+            <a href="#">Profile</a>
+            <a href="#">Feedback</a>
+            <a href="#">Logout</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- Left Panel -->
+        
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <h2>Performance Summary</h2>
+            <p>Graphs</p>
+            <p>Pie charts</p>
+            <p>Others</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Faculty Performance Tracker | Contact Us | Privacy Policy</p>
+    </div>
+</body>
+</html>
