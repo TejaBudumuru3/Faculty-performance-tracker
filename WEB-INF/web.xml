@@ -6,7 +6,7 @@
          version="4.0">
     <servlet>
     <servlet-name>connect</servlet-name>
-    <jsp-file>/DataBaseCon.jsp</jsp-file>
+    <jsp-file>/index.jsp</jsp-file>
 </servlet>
 <servlet-mapping>
     <servlet-name>connect</servlet-name>
