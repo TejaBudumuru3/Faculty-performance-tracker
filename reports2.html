@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Weekly Report</title>
+    <style>
+        /* (existing styles) */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .navbar {
+            background-color: #004080;
+            overflow: hidden;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+        .navbar a:hover {
+            background-color: #575757;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .search-bar select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+            font-size: 14px;
+        }
+        .search-bar button {
+            background-color: #004080;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 14px;
+        }
+        .search-bar button:hover {
+            background-color: #1a73e8;
+        }
+        .report-section {
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .report-section h2 {
+            text-align: center;
+            color: #004080;
+            cursor: pointer;
+        }
+        .report-content {
+            display: none;
+            margin-top: 20px;
+        }
+        .report-content.active {
+            display: block;
+        }
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .report-table th, .report-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .report-table th {
+            background-color: #004080;
+            color: white;
+        }
+        .report-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .report-table tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-left">
+            <a href="FacultyPage.html">Home</a>
+            <a href="workUpdate.html" target="_blank">Work Update</a>
+            <a href="Reports.html">Reports</a>
+            <a href="#">Notifications</a>
+        </div>
+        <div class="nav-right">
+            <a href="#">Profile</a>
+            <a href="#">Support/feedback</a>
+            <a href="#">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="search-bar">
+            <label for="month-select">Month:</label>
+            <select id="month-select" onchange="populateWeeks()">
+                <!-- Months will be dynamically generated -->
+            </select>
+            <label for="week-select">Week:</label>
+            <select id="week-select">
+                <!-- Weeks will be dynamically generated -->
+            </select>
+            <button onclick="filterReports()">Search</button>
+            <button onclick="showAllReports()">Show All Reports</button>
+        </div>
+
+        <div id="reports-container">
+            <!-- Reports will be dynamically generated -->
+        </div>
+    </div>
+
+    <script>
+        const months = [
+            "January", "February", "March", "April", "May", "June", 
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        const reportsData = {}; // To store dynamically generated reports
+
+        function populateMonths() {
+            const monthSelect = document.getElementById('month-select');
+            monthSelect.innerHTML = '<option value="default">Select</option>';
+            months.forEach((month, index) => {
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = month;
+                monthSelect.appendChild(option);
+            });
+        }
+
+        function populateWeeks() {
+            const weekSelect = document.getElementById('week-select');
+            weekSelect.innerHTML = '<option value="default">Select</option>';
+
+            const selectedMonth = document.getElementById('month-select').value;
+            if (!selectedMonth) return;
+
+            // Generate weeks dynamically (4 or 5 weeks)
+            for (let i = 1; i <= 4; i++) {
+                const option = document.createElement('option');
+                option.value = `Week-${i}`;
+                option.textContent = `Week-${i}`;
+                weekSelect.appendChild(option);
+            }
+        }
+
+        function generateReports() {
+            const reportsContainer = document.getElementById('reports-container');
+            reportsContainer.innerHTML = ''; // Clear previous reports
+
+            // Reversing the month order so December comes first
+            const reversedMonths = [...months].reverse();
+
+            reversedMonths.forEach(month => {
+                for (let week = 4; week >= 1; week--) { // Reverse week order
+                    const reportSection = document.createElement('div');
+                    reportSection.className = 'report-section';
+                    reportSection.setAttribute('data-month', month);
+                    reportSection.setAttribute('data-week', `Week-${week}`);
+
+                    // Dynamic Report Header with year included
+                    const header = document.createElement('h2');
+                    const currentYear = new Date().getFullYear();
+                    header.textContent = `${month} ${currentYear} - Week ${week}`;
+                    header.onclick = () => toggleReport(header);
+
+                    // Dynamic Report Content
+                    const content = document.createElement('div');
+                    content.className = 'report-content';
+                    content.innerHTML = `
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>General Work</td>
+                                    <td>Total class hours: ${Math.floor(Math.random() * 20)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Examinations</td>
+                                    <td>Total invigilation hours: ${Math.floor(Math.random() * 15)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Meetings</td>
+                                    <td>Total meeting hours: ${Math.floor(Math.random() * 10)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Publications</td>
+                                    <td>Works started: ${Math.floor(Math.random() * 5)}, Works completed: ${Math.floor(Math.random() * 3)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `;
+
+                    reportSection.appendChild(header);
+                    reportSection.appendChild(content);
+                    reportsContainer.appendChild(reportSection);
+
+                    // Store report data for filtering
+                    if (!reportsData[month]) reportsData[month] = {};
+                    reportsData[month][`Week-${week}`] = reportSection;
+                }
+            });
+        }
+
+        function toggleReport(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+        }
+        function filterReports() {
+            const selectedMonth = document.getElementById('month-select').value;
+            const selectedWeek = document.getElementById('week-select').value;
+        
+            // Loop through all months and weeks
+            Object.keys(reportsData).forEach(month => {
+                Object.keys(reportsData[month]).forEach(week => {
+                    const report = reportsData[month][week];
+        
+                    // Case 1: Both month and week are selected
+                    if (selectedMonth !== "default" && selectedWeek !== "default") {
+                        if (month === selectedMonth && week === selectedWeek) {
+                            report.style.display = 'block';
+                        } else {
+                            report.style.display = 'none';
+                        }
+                    }
+                    // Case 2: Only month is selected
+                    else if (selectedMonth !== "default" && selectedWeek === "default") {
+                        if (month === selectedMonth) {
+                            report.style.display = 'block';
+                        } else {
+                            report.style.display = 'none';
+                        }
+                    }
+                    // Case 3: Nothing is selected
+                    else {
+                        report.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        
+
+        function showAllReports() {
+            Object.keys(reportsData).forEach(month => {
+                Object.keys(reportsData[month]).forEach(week => {
+                    const report = reportsData[month][week];
+                    report.style.display = 'block';
+                });
+            });
+            const selectMonth=document.getElementById('month-select');
+            selectMonth.value='default';
+            const selectWeek=document.getElementById('week-select');
+            selectWeek.value='default';
+        }
+
+        // Initialize the page
+        populateMonths();
+        generateReports();
+    </script>
+</body>
+</html>
