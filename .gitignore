@@ -1,1 +1,5 @@
 /WEB-INF/config.properties
+
+/higer-temp
+
+/.gitignore
