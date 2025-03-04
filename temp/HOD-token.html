@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Departments</title>
+    <link href="navbar.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <!-- Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <style>
+        body {
+            background-color: #f4f4f9;
+        }
+        .side-menu {
+            width: 15%;
+            background-color: #004080;
+            color: white;
+            position: fixed;
+            top: 60px; /* Adjust this to match the navbar height */
+            bottom: 0;
+            padding: 1% 0;
+            overflow-y: auto;
+            z-index: 500; /* Lower than navbar */
+            }
+        .side-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+        .side-menu ul li {
+            padding: 8% 15%;
+            cursor: pointer;
+            border-bottom: 1px solid #1a73e8;
+        }
+        .side-menu ul li:hover {
+            background-color: #1a73e8;
+        }
+
+        .main-content {
+            margin-left: 15%;
+            padding: 80px 20px 20px;
+            width: 80%;
+        }
+
+        .form-container {
+            display: none;
+            padding: 0% 1%;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 1%;
+            color: #004080;
+        }
+        /* Change the background and text color */
+        .select2-container .select2-selection--single {
+            background-color: #f4f4f9;
+            color: #004080;
+            border: 2px solid #5c6064;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 16px;
+
+            height: 40px !important;  /* Adjust height */
+            display: flex !important;
+            align-items: center !important;  /* Center text vertically */
+        }
+
+        /* Change the dropdown arrow */
+        .select2-container--default .select2-selection--single .select2-selection__arrow b {
+            border-color: #004080 transparent transparent transparent !important;
+        }
+
+        /* Change the dropdown list style */
+        .select2-container--default .select2-results__option {
+            color: #004080;
+            background: white;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        /* Highlight hovered option */
+        .select2-container--default .select2-results__option--highlighted {
+            background-color: #004080 !important;
+            color: white !important;
+        }
+
+        /* Adjust width */
+        .select2-container {
+            width: 50% !important;
+            margin:0% 5%;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        .card {
+            
+            align-items: center;
+            width: auto;
+            padding: 2%;
+            margin: 1%;
+            background-color: #f9f9f9;
+            text-align: left;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card0 {
+            display: flex;
+            align-items: center;
+            width: auto;
+            padding: 2%;
+            margin: 1%;
+            background-color: #f9f9f9;
+            text-align: left;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card1 {
+            display: none;
+            height: 30%;
+            width: auto;
+            overflow: auto;
+            padding: 2%;
+            margin: 1%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card2 {
+            height: 30%;
+            width: auto;
+            overflow: auto;
+            padding: 2%;
+            margin: 1%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2{
+            text-align: center;
+        }
+        .card textarea, .card0 textarea{
+            flex:1;
+            width: 97%;
+            max-width: 97%;
+            padding: 1%;
+            margin:1%;
+            border: 1px solid #5c6064;
+            border-radius: 5px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        .assignBtn{
+            text-align: center;
+        }
+        .searchBtn {
+            background-color: #004080;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 14px;
+        }
+        .searchBtn:hover {
+            background-color: #2c7de8;
+        }
+        .dashboard {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: nowrap;
+        }
+        .btns {
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            flex: 1;
+            max-width: 24%;
+        }
+        .btns:hover {
+            transform: scale(1.05);
+            background-color: #e8f0fe;
+        }
+        .card1.active {
+            display: block;
+        } 
+        .active-category {
+            background-color: white !important;
+            color: #004080 !important;
+            font-weight: bold;
+        }        
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="nav-left">
+            <a href="HOD-Home.html" class="logo">..........</a>
+            <a href="HOD-Home.html">Home</a>
+            <a href="HOD-reports.html">Faculty</a>
+            <a href="HOD-token.html">Tasks</a>
+        </div>
+        <div class="nav-right">
+            <a href="HOD-profile.html">Profile</a>
+            <a href="login.html">Logout</a>
+        </div>
+    </div>
+
+    <div class="side-menu">
+        <ul>
+            <li id="assign" onclick="showForm('Assign')">Assign Task</li>
+            <li id="status" onclick="showForm('Status')">Task Status</li>
+          </ul>
+    </div>
+
+    <div id="main" class="main-content" >
+        <div id="Assign" class="form-container">
+            <h2>Assign Task to Faculty</h2>
+            <div class="card2">
+                <div id="name" class="card">
+                    <div class="dropdown-container">
+                        <label for="faculty">Faculty Name:</label>
+                        <select id="faculty" data-placeholder="Select or Search Faculty">
+                            <option value="">Select Faculty</option>
+                            <option value="faculty1">Faculty1</option>
+                            <option value="faculty2">Faculty2</option>
+                            <option value="faculty3">Faculty3</option>
+                            <option value="faculty4">Faculty4</option>
+                            <option value="faculty5">Faculty5</option>
+                            <option value="faculty6">Faculty6</option>
+                            <option value="faculty7">Faculty7</option>
+                            <option value="faculty8">Faculty8</option>
+                            <option value="faculty9">Faculty9</option>
+                            <option value="faculty10">Faculty10</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="title" class="card0">
+                    <label for="faculty">Enter Title: </label>
+                    <textarea id="taskTitle" rows="2" placeholder="Title" ></textarea>
+                </div>
+                <div id="name" class="card">
+                    <label for="faculty">Enter text: </label>
+                    <textarea id="taskData" rows="5" placeholder="Type or paste text here..."></textarea>
+                </div>
+                <div class="assignBtn">
+                    <button class="searchBtn" onclick="assignTask()">Assign</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="Status" class="form-container">
+            <div class="dashboard">
+                <div class="btns" onclick="showTab('assigned')">ASSIGNED TASKS</div>
+                <div class="btns" onclick="showTab('accepted')">ACCEPTED TASKS</div>
+                <div class="btns" onclick="showTab('completed')">COMPLETED TASKS</div>
+            </div>
+                <div id="assigned" class="card1">
+                    <h2>ASSIGNED TASKS</h2>
+                    <div class="card">
+                        <h3 class="head">Faculty-1</h3>
+                        <div id="name" class="card">Name</div>
+                        <div id="roll" class="card">Roll number</div>
+                        <div id="hours" class="card">Task Title, assigned date or time</div>
+                    </div>
+                </div>
+                <div id="accepted" class="card1">
+                    <h2>ACCEPTED TASKS</h2>
+                    <div class="card">
+                        <h3 class="head">Faculty-1</h3>
+                        <div id="name" class="card">Name</div>
+                        <div id="roll" class="card">Roll number</div>
+                        <div id="hours" class="card">Task Title</div>
+                    </div>
+                </div>
+            <div id="completed" class="card1">
+                <h2>COMPLETED TASKS</h2>
+                <div class="card">
+                    <h3 class="head">Faculty-1</h3>
+                    <div id="name" class="card">Name</div>
+                    <div id="roll" class="card">Roll number</div>
+                    <div id="hours" class="card">Task Title</div>
+                </div>
+            </div>
+        </div>        
+    </div>
+
+    <script src="HODscript.js"></script>
+    <script>
+        // for search bar in dropdown by external library
+        $(document).ready(function() {
+            $('#faculty, #year, #month, #week').select2({
+                placeholder: "Select an option",
+                allowClear: true
+            });
+        });
+    </script>
+</body>
+</html>

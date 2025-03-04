@@ -1,6 +1,7 @@
 <%@ page import="java.sql.*"%>  
 <%@ page language="java" contentType="text/html" %>  
-<%@ page errorPage="exception.jsp" %>  
+<%@ page errorPage="exception.jsp" %> 
+<%@ include file="cache.jsp" %> 
 
 <!DOCTYPE html>  
 <html lang="en">  
@@ -15,11 +16,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>  
 </head>  
 <body>  
-    <!-- Load jQuery and Toastr JS -->  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>  
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>  
+    <!-- Include toastr CSS -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+            <!-- Include jQuery -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+            <!-- Include toastr JS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+            <script src="./src/js/scripts.js"></script><script src="./src/js/scripts.js"></script>
     <div class="container">  
         <div class="logo">  
             <img src="./src/faculty.png" alt="logo" width="100%"/>  
@@ -43,10 +48,10 @@
                 
                 <select class="custom-select custom-select-lg mb-3" id="role" name="role" required>  
                     <option selected value="">Select Role</option> 
-                    <option value="4">Higher Authority</option>  
-                    <option value="3">HOD</option>  
                     <option value="1">Faculty</option>  
-                    <option value="2">Jr. Assistant</option>  
+                    <option value="2">Jr. Assistant</option> 
+                    <option value="3">HOD</option>  
+                    <option value="4">Higher Authority</option> 
                 </select>   
                 <br>  
 
@@ -55,18 +60,7 @@
         </div>  
     </div>  
 
-    <script src="/src/scripts.js">  
-        
-            // Initialize Toastr options  
-            // toastr.options = {  
-            //     "closeButton": true,  
-            //     "progressBar": true,  
-            //     "positionClass": "toast-top-right",  
-            //     "timeOut": "5000",  
-            //     "extendedTimeOut": "1000"  
-            // }; 
-        
-    </script>
+    <script src="./src/js/scripts.js"></script>
 
 <%
 
@@ -76,11 +70,14 @@ if ("POST".equalsIgnoreCase(request.getMethod())){
 
 String userId = request.getParameter("userid");  
 String password = request.getParameter("pass");  
+Connection con = null;
 int role = Integer.parseInt(request.getParameter("role"));  
 if (userId != null && password != null && role != 0) {
-        Connection con = null;
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        PreparedStatement stmt1 = null;
+        ResultSet rs1 = null;
        
     try{
         con = (Connection)session.getAttribute("dbConnection");
@@ -96,27 +93,30 @@ if (userId != null && password != null && role != 0) {
             if(rs.next()){
                 valid=true;
                 session.setAttribute("userID",userId);
+                session.setAttribute("role", role);
+                String dp = "SELECT DepartmentID from faculty where facultyid = ?";
+                stmt1 = con.prepareStatement(dp);
+                stmt1.setString(1, userId);
+
+                rs1 = stmt1.executeQuery();
+                if(rs1.next()) {
+                    int val = rs1.getInt("DepartmentID");
+                    session.setAttribute("departmentId", val);
+                }
+
             }
             else{
             valid=false;
             }
-        }
-        else{
-            %>
-            <script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function() {
-                toastr.error("Database is not connected!!!");});
-            </script>
-        <%
-        
-        }
+        } 
+       
             
     }catch(Exception e)
     {
         %>
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
-                toastr.error(<%= e %>);});
+                toastr.error(<%= e.getMessage() %>);});
             </script>
         <%}
 }
@@ -128,23 +128,34 @@ if (userId != null && password != null && role != 0) {
             // Check login result from server-side processing  
             var loginResult = <%= valid %>; 
             var role = <%= role %> 
-            
+            var connection = "<%= con %>";
+
+            if(connection ==="null"){
+                toastr.error('Database is connection failed.\n\n Please try again');
+                setTimeout(function() {   
+                    window.location.href = './index.jsp';   
+                }, 3000);
+            }
+            else{
+            console.log(loginResult);
+            console.log(connection);
             if (loginResult) {  
                 toastr.success('Login successfull'); 
                 setTimeout(function() {   
 
-                    if(role=1)
-                    window.location.href = './FacultyPage.html';
-                    else if(role=2)
-                    window.location.href = '#';
-                    else if(role=3)
-                    window.location.href = "#";
-                    else if(role=4)
-                    window.location.href = "#";   
+                    if(role===1)
+                    window.location.href = './FacultyPages/FacultyPage.jsp';
+                    else if(role===2)
+                    window.location.href = './JAPages/JAHome.jsp';
+                    else if(role===3)
+                    window.location.href = "./HODPages/HODHome.jsp";
+                    else if(role===4)
+                    window.location.href = "./HAPages/HAHome.jsp";   
                 }, 1000);
             } else {  
                   toastr.error('Invalid UserID or Password');  
-            }  
+            } 
+            } 
         });  
  </script>
 <%
