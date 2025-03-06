@@ -280,7 +280,7 @@
     </div>
     <div class="greeting" id="greeting"></div>
     <div class="card1">
-        <div class="card-container">
+        <div class="card-container" style="justify-content: space-evenly;">
             <div class="card" id="task">
                 <h3>Tasks</h3>
                 <p id="pendingTasks"></p>

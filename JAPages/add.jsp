@@ -13,29 +13,29 @@
 
 
         if(con == null) {
-        %>
-        <script>
-        window.onload = function() {
-            showToast("Database Connection lost", "error");
-            setTimeout(() => {
-                window.location.href = "../logout.jsp";
-            }, 3000);
-        };
-        </script>
-        <%
-    }
-    if(role!=2){
-         %>
-        <script>
-        window.onload = function() {
-            showToast("You dont have authorized access to this page", "error");
-            setTimeout(() => {
-                window.location.href = "../logout.jsp";
-            }, 3000);
-        };
-        </script>
-        <%
-    }         
+            %>
+            <script>
+            window.onload = function() {
+                showToast("Database Connection lost", "error");
+                setTimeout(() => {
+                    window.location.href = "../logout.jsp";
+                }, 3000);
+            };
+            </script>
+            <%
+        }
+        if(role!=2){
+            %>
+            <script>
+            window.onload = function() {
+                showToast("You dont have authorized access to this page", "error");
+                setTimeout(() => {
+                    window.location.href = "../logout.jsp";
+                }, 3000);
+            };
+            </script>
+            <%
+        }         
 %>
 
 
@@ -44,13 +44,118 @@
 <head>
     <title>ADD Faculty</title>
     <link href="../src/navbar.css" rel="stylesheet">
-    <link href="./junior-css.css" rel="stylesheet">
+    <%-- <link href="./junior-css.css" rel="stylesheet"> --%>
     <!-- Toastify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <!-- Toastify JS -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="./junior-script.js"></script>
     <script src="../src/js/scripts.js"></script>
+    <style>
+        body {
+        background-color: #f4f4f9;
+        }
+        .side-menu {
+            width: 15%;
+            background-color: #004080;
+            color: white;
+            position: fixed;
+            top: 60px; /* Adjust this to match the navbar height */
+            bottom: 0;
+            padding: 1% 0;
+            overflow-y: auto;
+            z-index: 500; /* Lower than navbar */
+            }
+        .side-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+        .side-menu ul li {
+            padding: 8% 15%;
+            cursor: pointer;
+            border-bottom: 1px solid #1a73e8;
+        }
+        .side-menu ul li:hover {
+            background-color: #1a73e8;
+        }
+
+        .main-content {
+            margin-left: 15%;
+            padding: 80px 20px 20px;
+            width: 80%;
+
+        }
+        .active-category {
+            background-color: white !important;
+            color: #004080 !important;
+            font-weight: bold;
+        }
+
+        .form-container {
+            display: none;
+            width: 80%;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+        }
+        select{
+            flex: 4;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            border-color: #333;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            flex: 1;
+            font-weight: bold;
+            color: #333;
+            text-align: left;
+            margin-right: 10px;
+        }
+
+        input {
+            flex: 4;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            border-color: #333;
+        }
+
+        .submit-div{
+            text-align: center;
+        }
+        .submit-btn {
+            width: 20%;
+            background: #22438c;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #112c66;
+        }
+    </style>
 
 </head>
 <body>
@@ -80,7 +185,7 @@
     <div id="main" class="main-content" >
         <div id="faculty" class="form-container" id="FormFaculty" method="post" action="add.jsp">
             <h2>Add New Faculty</h2>
-            <form>
+            <form id="formIns">
                 <div class="input-group">
                     <label >Faculty ID:</label>
                     <input type="text" id="facultyID" name="facultyID" required>
@@ -194,25 +299,25 @@
                     <select id="comFacultyName" name="comFacultyName" required>
                     <option value="">select Faculty</option>
 
-                <%
-                try{
-                    String FListQuery = "SELECT FacultyID, FacultyName FROM faculty where DepartmentID = ?";
-                    stmt = con.prepareStatement(FListQuery);
-                    stmt.setInt(1, departmentId);
-                    ResultSet rs1 = stmt.executeQuery();
-                    while(rs1.next()) {
+                    <%
+                    try{
+                        String FListQuery = "SELECT FacultyID, FacultyName FROM faculty where DepartmentID = ?";
+                        stmt = con.prepareStatement(FListQuery);
+                        stmt.setInt(1, departmentId);
+                        ResultSet rs1 = stmt.executeQuery();
+                        while(rs1.next()) {
+                            %>
+                                <option value="<%= rs1.getString("FacultyID") %>"><%= rs1.getString("FacultyName") %></option>
+                            <%
+                        }
+                    } catch(SQLException e) {
                         %>
-                            <option value="<%= rs1.getString("FacultyID") %>"><%= rs1.getString("FacultyName") %></option>
+                        <script>
+                            showToast("<%=e.getMessage()%>", "error");
+                        </script>
                         <%
                     }
-                } catch(SQLException e) {
                     %>
-                    <script>
-                        showToast("<%=e.getMessage()%>", "error");
-                    </script>
-                    <%
-                }
-                %>
                 </select>
                 </div>
                 <div class="input-group">
@@ -220,25 +325,25 @@
                     <select id="categoryName" name="categoryName" required>
                         <option value="">select Category</option>
 
-                <%  
-                try{
-                    String CatQuery = "SELECT * FROM `category`";
-                    stmt = con.prepareStatement(CatQuery);
-                    ResultSet rs1 = stmt.executeQuery();
-                    while(rs1.next()) {
+                    <%  
+                    try{
+                        String CatQuery = "SELECT * FROM `category`";
+                        stmt = con.prepareStatement(CatQuery);
+                        ResultSet rs1 = stmt.executeQuery();
+                        while(rs1.next()) {
+                            %>
+                                <option value="<%= rs1.getString("CategoryID") %>"><%= rs1.getString("CategoryName") %></option>
+                            <%
+                        }
+                    } catch(SQLException e) {
                         %>
-                            <option value="<%= rs1.getString("CategoryID") %>"><%= rs1.getString("CategoryName") %></option>
+                        <script>
+                            showToast("<%=e.getMessage()%>", "error");
+                        </script>
                         <%
                     }
-                } catch(SQLException e) {
-                    %>
-                    <script>
-                        showToast("<%=e.getMessage()%>", "error");
-                    </script>
-                    <%
-                }
 
-                %>
+                    %>
                     </select>
                 </div>
     
@@ -253,9 +358,9 @@
                 
             </form>
         </div>
-        
     </div>
-    
+</body>
+</html>
 <%
 String button = request.getParameter("submit-btn");
 if(button != null) {
@@ -317,6 +422,7 @@ if(button != null) {
                 %>
                 <script>
                     showToast("Faculty added successfully", "success");
+                    document.getElementById("formIns").reset();
                 </script>
                 <%
                 facultyFlag = roleFlag = credentialsFlag = false;
@@ -371,6 +477,7 @@ if(button != null) {
                 %>
                 <script>
                     showToast("Role added successfully", "success");
+                    document.getElementById("FormRole").reset()
                 </script>
                 <%
                 roleFlag = credentialsFlag = false;
@@ -420,6 +527,7 @@ if(button != null) {
                         console.log("<%=facultyName%>");
                         console.log("<%=categoryName%>");
                         showToast("Committee added successfully", "success");
+                        document.getElementById("FormCommittee").reset();
                     </script>
                         
                     <%
@@ -438,16 +546,3 @@ if(button != null) {
     }
 }
 %>
-    <script>
-        // for search bar in dropdown by external library
-        $(document).ready(function() {
-            $('#faculty').select2({
-                placeholder: "Select an option",
-                allowClear: true,
-                dropdownParent: $(document.body) // Ensures dropdown isn't clipped
-            });
-        });
-    </script>
-
-</body>
-</html>

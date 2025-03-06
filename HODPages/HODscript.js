@@ -20,56 +20,59 @@ function showForm(formId) {
 
 function showTab(tabId) {
     // Hide all tab contents
+    console.log(tabId);
     const tabs = document.querySelectorAll('.card1');
+    console.log(tabId);
+
     tabs.forEach(tab => tab.classList.remove('active'));
 
     // Show the selected tab content
     document.getElementById(tabId).classList.add('active');
 }
 
-function assignTask() {
-    // Get input values
-    let faculty = document.getElementById('faculty').value;
-    let title = document.getElementById('taskTitle').value.trim();
+// function assignTask() {
+//     // Get input values
+//     let faculty = document.getElementById('faculty').value;
+//     let title = document.getElementById('taskTitle').value.trim();
 
-    // Check if all required fields are filled
-    if (!faculty || !title) {
-        Toastify({
-            text: "Please fill all fields before assigning the task!",
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: "#a3ac22;", // Yellow for warning
-            stopOnFocus: true
-        }).showToast();
-        return; // Stop execution if any field is empty
-    }
+//     // Check if all required fields are filled
+//     if (!faculty || !title) {
+//         Toastify({
+//             text: "Please fill all fields before assigning the task!",
+//             duration: 3000,
+//             gravity: "top",
+//             position: "right",
+//             backgroundColor: "#a3ac22;", // Yellow for warning
+//             stopOnFocus: true
+//         }).showToast();
+//         return; // Stop execution if any field is empty
+//     }
 
-    // Show confirmation dialog
-    let confirmation = confirm("Are you sure you want to assign this task?");
-    if (confirmation) {
-        Toastify({
-            text: "Task assigned successfully!",
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: "#39864b", // Green for success
-            stopOnFocus: true
-        }).showToast();
+//     // Show confirmation dialog
+//     let confirmation = confirm("Are you sure you want to assign this task?");
+//     if (confirmation) {
+//         Toastify({
+//             text: "Task assigned successfully!",
+//             duration: 3000,
+//             gravity: "top",
+//             position: "right",
+//             backgroundColor: "#39864b", // Green for success
+//             stopOnFocus: true
+//         }).showToast();
 
-        // (Optional) Clear fields after successful assignment
-        document.getElementById('faculty').value = "";
-        document.getElementById('taskTitle').value = "";
-    } else {
-        Toastify({
-            text: "Task assignment canceled.",
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: "#ad2c39", // Red for cancel
-            stopOnFocus: true
-        }).showToast();
-    }
-}
+//         // (Optional) Clear fields after successful assignment
+//         document.getElementById('faculty').value = "";
+//         document.getElementById('taskTitle').value = "";
+//     } else {
+//         Toastify({
+//             text: "Task assignment canceled.",
+//             duration: 3000,
+//             gravity: "top",
+//             position: "right",
+//             backgroundColor: "#ad2c39", // Red for cancel
+//             stopOnFocus: true
+//         }).showToast();
+//     }
+// }
 
 
