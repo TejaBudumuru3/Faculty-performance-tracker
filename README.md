@@ -22,7 +22,7 @@ It ensures **transparency** and **accountability** while streamlining administra
 
 ## 🛠 Tech Stack
 - **Frontend:** HTML, CSS, JavaScript  
-- **Backend:** Java, Spring Boot  
+- **Backend:** Java, JSP
 - **Database:** MySQL  
 - **Version Control:** Git, GitHub  
 
