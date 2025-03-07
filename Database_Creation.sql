@@ -109,6 +109,7 @@ insert into faculty values ('Jr.AssistIT', 'Jr.AssistIT', '5555555555', '1111111
 insert into faculty values ('Jr.AssistCHE', 'Jr.AssistCHE', '6666666666', '1111111111@gmail.com', 1, 'Junior Assisstant', 6, 2);
 insert into faculty values ('Jr.AssistCIV', 'Jr.AssistCIV', '7777777777', '1111111111@gmail.com', 1, 'Junior Assisstant', 7, 2);
 insert into faculty values ('Jr.AssistDE', 'Jr.AssistDE', '8888888888', '1111111111@gmail.com', 1, 'Junior Assisstant', 8, 2);
+insert into faculty values ('HA', 'HA', '8888888888', '1111111111@gmail.com', 1, 'HA', 1, 2);
 
 insert into faculty_has_roles (RoleID, FacultyID) values (2, 'Jr.AssistCSE'), (2, 'Jr.AssistECE'), (2, 'Jr.AssistEEE'), (2, 'Jr.AssistMEC'), (2, 'Jr.AssistIT'), (2, 'Jr.AssistCHE'), (2, 'Jr.AssistCIV'), (2, 'Jr.AssistDE');
 

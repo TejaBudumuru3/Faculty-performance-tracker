@@ -395,6 +395,7 @@
     String DETOPNAME = null;
     String DETOPID = null;
     String DETOPHRS = null;
+
 String jsonData = (String) session.getAttribute("json");
 String user = (String) session.getAttribute("userID");
     int role = (int) session.getAttribute("role");
@@ -530,7 +531,7 @@ try{
 
 }
 catch(Exception e){
-    out.println(e);
+    out.println("<script>console.log();</script>");
 }
 }
 }

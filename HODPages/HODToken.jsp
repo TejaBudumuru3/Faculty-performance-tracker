@@ -304,7 +304,7 @@
         <div class="navbar">
             <div class="nav-left">
                 <a href="HODHome.jsp">Home</a>
-                <a href="HODReports.jsp">Faculty</a> 
+                <a href="HODReports.jsp">Reports</a> 
                 <a href="HODToken.jsp">Tasks</a>
             </div>
             <div class="nav-right">
