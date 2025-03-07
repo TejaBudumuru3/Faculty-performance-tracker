@@ -24,7 +24,6 @@ It ensures **transparency** and **accountability** while streamlining administra
 - **Frontend:** HTML, CSS, JavaScript  
 - **Backend:** Java, Spring Boot  
 - **Database:** MySQL  
-- **Authentication:** JWT (JSON Web Tokens)  
 - **Version Control:** Git, GitHub  
 
 ---
