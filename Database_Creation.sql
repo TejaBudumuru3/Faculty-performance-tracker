@@ -114,4 +114,5 @@ insert into faculty values ('HA', 'HA', '8888888888', '1111111111@gmail.com', 1,
 insert into faculty_has_roles (RoleID, FacultyID) values (2, 'Jr.AssistCSE'), (2, 'Jr.AssistECE'), (2, 'Jr.AssistEEE'), (2, 'Jr.AssistMEC'), (2, 'Jr.AssistIT'), (2, 'Jr.AssistCHE'), (2, 'Jr.AssistCIV'), (2, 'Jr.AssistDE');
 
 
-insert into Credentials (FacultyID, FacultyPassword, RoleID) values ('Jr.AssistCSE', 'pwd', 2), ('Jr.AssistECE', 'pwd', 2), ('Jr.AssistEEE', 'pwd', 2), ('Jr.AssistMEC', 'pwd', 2), ('Jr.AssistIT', 'pwd', 2), ('Jr.AssistCHE', 'pwd', 2), ('Jr.AssistCIV', 'pwd', 2), ('Jr.AssistDE', 'pwd', 2);
+insert into Credentials (FacultyID, FacultyPassword, RoleID) values ('Jr.AssistCSE', 'pwd', 2), ('Jr.AssistECE', 'pwd', 2), ('Jr.AssistEEE', 'pwd', 2), ('Jr.AssistMEC', 'pwd', 2), ('Jr.AssistIT', 'pwd', 2), ('Jr.AssistCHE', 'pwd', 2), ('Jr.AssistCIV', 'pwd', 2), ('Jr.AssistDE', 'pwd', 2),("1111111111", "pwd", 4);
+
