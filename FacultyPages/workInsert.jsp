@@ -64,69 +64,106 @@
                 session.setAttribute("database error", "Database connection failed");
             }
             else{
-                classes = Integer.parseInt(formData.get("classes"));
-                prep = Integer.parseInt(formData.get("prep"));
-                reviews = Integer.parseInt(formData.get("reviews"));
-                counsel = Integer.parseInt(formData.get("counsel"));
-                invig = Integer.parseInt(formData.get("invig"));
-                correction = Integer.parseInt(formData.get("correction"));
-                viva = Integer.parseInt(formData.get("viva"));
-                external = Integer.parseInt(formData.get("external"));
-                meeting = Integer.parseInt(formData.get("meeting"));
-                workshop = Integer.parseInt(formData.get("workshop"));
-                visit = Integer.parseInt(formData.get("visit"));
-                seminar = Integer.parseInt(formData.get("seminar"));
-                started = Integer.parseInt(formData.get("started"));
-                pending = Integer.parseInt(formData.get("pending"));
-                published = Integer.parseInt(formData.get("published"));
-                patent = Integer.parseInt(formData.get("patent"));
-                
-                //current date
                 LocalDate currentDate = LocalDate.now();
                 Date formattedDate = Date.valueOf(currentDate);
-                //String formattedDate = currentDate.toString();
 
-                
-                String InsertQ = "insert into Log (FacultyID, Date, ClassHours, PreparationTime, ProjectReview, CounsellingHours, InvigilationHours, ExamEvaluations, Viva, Externals, Meetings, Seminars, Workshops, EventHours, PublicationResearchWork, PublicationsPublished, PatentResearchWork, PatentsGained, LogCredit) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-                stmt = con.prepareStatement(InsertQ);
+                stmt = con.prepareStatement("SELECT * FROM log WHERE FacultyID = ? AND Date = ?");
                 stmt.setString(1, user);
                 stmt.setDate(2, formattedDate);
-                stmt.setInt(3, classes);
-                stmt.setInt(4, prep);
-                stmt.setInt(5, reviews);
-                stmt.setInt(6, counsel);
-                stmt.setInt(7, invig);
-                stmt.setInt(8, correction);
-                stmt.setInt(9, viva);
-                stmt.setInt(10, external);
-                stmt.setInt(11, meeting);
-                stmt.setInt(12, workshop);
-                stmt.setInt(13, visit);
-                stmt.setInt(14, seminar);
-                stmt.setInt(15, started);
-                stmt.setInt(16, pending);
-                stmt.setInt(17, published);
-                stmt.setInt(18, patent);
-                stmt.setInt(19, (classes + prep + reviews + counsel + invig + correction + viva + external + meeting + workshop + visit + seminar + started + published));
-                int rowsAffected = stmt.executeUpdate();
 
-                if (rowsAffected > 0) {
-                    session.setAttribute("success", "Data inserted successfully");  
-                } else {
-                    session.setAttribute("failed", "Data insertion failed");
+                rs = stmt.executeQuery();
+                if(rs.next()){
+                    %>
+                        <script type="text/javascript">
+                            document.addEventListener("DOMContentLoaded", function() {
+                                toastr.error("you have already updated your data");});
+                                setTimeout(() => {
+                                    window.location.href = "FacultyPage.jsp";
+                                    }, 4000);
+
+                            </script>
+                    <%
+                    out.println("<script>console.log('"+rs.getString("FacultyID")+"');</script>");
+                    out.println("<script>console.log('date:"+formattedDate+"');</script>");
+
                 }
+                else{
+                    classes = Integer.parseInt(formData.get("classes"));
+                    prep = Integer.parseInt(formData.get("prep"));
+                    reviews = Integer.parseInt(formData.get("reviews"));
+                    counsel = Integer.parseInt(formData.get("counsel"));
+                    invig = Integer.parseInt(formData.get("invig"));
+                    correction = Integer.parseInt(formData.get("correction"));
+                    viva = Integer.parseInt(formData.get("viva"));
+                    external = Integer.parseInt(formData.get("external"));
+                    meeting = Integer.parseInt(formData.get("meeting"));
+                    workshop = Integer.parseInt(formData.get("workshop"));
+                    visit = Integer.parseInt(formData.get("visit"));
+                    seminar = Integer.parseInt(formData.get("seminar"));
+                    started = Integer.parseInt(formData.get("started"));
+                    pending = Integer.parseInt(formData.get("pending"));
+                    published = Integer.parseInt(formData.get("published"));
+                    patent = Integer.parseInt(formData.get("patent"));
+                    boolean insert=false;
+
+                    if((classes > 4) || ((classes+prep+reviews+counsel+invig+correction+viva+external+meeting+workshop+visit+seminar+started+pending)>12)){
+                        %>
+                        <script type="text/javascript">
+                            document.addEventListener("DOMContentLoaded", function() {
+                                toastr.error("Invalid Input");});
+                                insert=false;
+                                setTimeout(() => {
+                                    window.location.href = "workInsert.jsp";
+                                }, 4000);
+                            </script>
+                        <%
+                    }
+                    else{
+
+                        String InsertQ = "insert into Log (FacultyID, Date, ClassHours, PreparationTime, ProjectReview, CounsellingHours, InvigilationHours, ExamEvaluations, Viva, Externals, Meetings, Seminars, Workshops, EventHours, PublicationResearchWork, PublicationsPublished, PatentResearchWork, PatentsGained, LogCredit) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                        stmt = con.prepareStatement(InsertQ);
+                        stmt.setString(1, user);
+                        stmt.setDate(2, formattedDate);
+                        stmt.setInt(3, classes);
+                        stmt.setInt(4, prep);
+                        stmt.setInt(5, reviews);
+                        stmt.setInt(6, counsel);
+                        stmt.setInt(7, invig);
+                        stmt.setInt(8, correction);
+                        stmt.setInt(9, viva);
+                        stmt.setInt(10, external);
+                        stmt.setInt(11, meeting);
+                        stmt.setInt(12, workshop);
+                        stmt.setInt(13, visit);
+                        stmt.setInt(14, seminar);
+                        stmt.setInt(15, started);
+                        stmt.setInt(16, pending);
+                        stmt.setInt(17, published);
+                        stmt.setInt(18, patent);
+                        stmt.setInt(19, (classes + prep + reviews + counsel + invig + correction + viva + external + meeting + workshop + visit + seminar + started + published));
+                        int rowsAffected = stmt.executeUpdate();
+
+                        if (rowsAffected > 0) {
+                            session.setAttribute("success", "Data inserted successfully");  
+                        } else {
+                            session.setAttribute("failed", "Data insertion failed");
+                        }
+                    }
+                }
+
+                
             }
         }
         catch (Exception e) {
-             session.setAttribute("catch", e);
+            session.setAttribute("catch", e);
         }
         String success = (String) session.getAttribute("success");
         String failed = (String) session.getAttribute("failed");
         if(success != null){
             session.removeAttribute("success");
              %>
-        <script type="text/javascript">
+            <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
                 toastr.success("<%= success%>");});
             </script>
@@ -137,12 +174,16 @@
         else if(failed != null){
             session.removeAttribute("failed");
             %>
-        <script type="text/javascript">
+            <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
                 toastr.error("<%= failed%>");});
+                setTimeout(()=>{window.location.href="workInsert.jsp"},4000);
+
             </script>
         <%
         }
+
+
     }
     }
 
