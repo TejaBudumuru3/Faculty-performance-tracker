@@ -49,6 +49,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <!-- Toastify JS -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
     <script src="./junior-script.js"></script>
     <script src="../src/js/scripts.js"></script>
     <style>
