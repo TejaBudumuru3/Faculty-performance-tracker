@@ -24,6 +24,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+//update-password
+const updatePasswordButton = document.getElementById("update-password");
+if(updatePasswordButton){
+    window.href.location="../updatePassword.jsp";
+}
+
 // //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function showForm(formId) {

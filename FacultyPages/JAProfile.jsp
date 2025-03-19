@@ -20,7 +20,7 @@ ResultSet rs = null;
 if (user == null) {
     response.sendRedirect("../index.jsp");
 } else {
-    if (role != 4) {
+    if (role != 2) {
 %>
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function () {
@@ -82,7 +82,6 @@ if (user == null) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="../src/js/scripts.js"></script>
 
     <style>
         body {
@@ -268,12 +267,14 @@ if (user == null) {
 <body>
     <div class="navbar">
         <div class="nav-left">
-            <a href="HAHome.jsp">Home</a>
-            <a href="HADetails.jsp">Details</a>
-            <a href="HAReports.jsp">Reports</a>
+            <a href="JAHome.jsp">Home</a>
+            <a href="add.jsp">Add Faculty</a>
+            <a href="update.jsp">Update Faculty</a>
+            <a href="delete.jsp">Delete Faculty</a>
+            <a href="JAToken.jsp">Tasks</a>
         </div>
         <div class="nav-right">
-            <a href="HAProfile.jsp">Profile</a>
+            <a href="JAProfile.jsp">Profile</a>
             <button id="logout" style="background: #004080; border: none; color: inherit; cursor: pointer; font: inherit; padding: 1px 10px;">Logout</button>
         </div>
     </div>
@@ -298,14 +299,14 @@ if (user == null) {
     <!-- Password Update Form -->
     <div class="form-container" id="updatePass">
         <h2>Update Password</h2>
-        <form method="post" style="display: flex;flex-direction: column;flex-wrap: wrap;">
+        <form method="post">
             <label>Old Password:</label>
             <input type="password" name="oldPassword" required>
             <label>New Password:</label>
             <input type="password" name="NewPassword" required>
             <label>Re-enter Password:</label>
             <input type="password" name="RenterPassword" required>
-            <button type="submit" style="margin: auto;margin-top: 2%;" class="btn btn-primary" name="pass" value="change">Change Password</button>
+            <button type="submit" class="btn btn-primary" name="pass" value="change">Change Password</button>
         </form>
     </div>
 </body>

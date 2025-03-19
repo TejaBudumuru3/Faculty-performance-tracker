@@ -452,36 +452,89 @@ if(button != null) {
         }
 
         try {
-            String query = "INSERT INTO `faculty_has_roles` (`RoleID`, `FacultyID`) VALUES (?, ?)";
-            stmt = con.prepareStatement(query);
-            stmt.setString(1, roleName);
-            stmt.setString(2, facultyName);
-            int rs = stmt.executeUpdate();
+            String hodID="";
+            String hodName="";
+            if(roleName.equals("3")){
+                stmt = con.prepareStatement("SELECT f.facultyID, f.FacultyName FROM faculty f JOIN faculty_has_roles fhr ON f.facultyID = fhr.facultyID JOIN role r ON fhr.roleID = r.roleID where f.DepartmentID = ? and r.RoleID = 3");
+                stmt.setInt(1, departmentId);
 
-            boolean roleFlag = false;
-            boolean credentialsFlag = false;
+                ResultSet hod = stmt.executeQuery();
+                if(hod.next()){
+                    hodID = hod.getString("facultyID");
+                    hodName = hod.getString("FacultyName");
+                    out.println("<script>console.log('"+hodID+' '+hodName+"')</script>");
 
-            if(rs>0){
-                roleFlag = true;
+                    out.println("<script>"+
+                    "showToast('HOD role is assigned with ID: "+hodID+" and Name: "+hodName+"\\n To assign new HOD, remove previous HOD', 'error');</script>");
+
+                }
+                else{
+                    String query = "INSERT INTO `faculty_has_roles` (`RoleID`, `FacultyID`) VALUES (?, ?)";
+                    stmt = con.prepareStatement(query);
+                    stmt.setString(1, roleName);
+                    stmt.setString(2, facultyName);
+                    int rs = stmt.executeUpdate();
+
+                    boolean roleFlag = false;
+                    boolean credentialsFlag = false;
+
+                    if(rs>0){
+                        roleFlag = true;
+                    }
+                    String query2 = "INSERT INTO `credentials` ( `FacultyID`, `FacultyPassword`, `RoleID`) VALUES ( ?, ?, ?)";
+                    stmt = con.prepareStatement(query2);
+                    stmt.setString(1, facultyName);
+                    stmt.setString(2, rolePassword);
+                    stmt.setString(3, roleName);
+                    int rs2 = stmt.executeUpdate();
+                    if(rs2>0){
+                    credentialsFlag = true;
+                    }
+                    if(roleFlag && credentialsFlag){
+                        %>
+                        <script>
+                            showToast("Role added successfully", "success");
+                            document.getElementById("FormRole").reset()
+                        </script>
+                        <%
+                        roleFlag = credentialsFlag = false;
+
+                    }
+                }
             }
-            String query2 = "INSERT INTO `credentials` ( `FacultyID`, `FacultyPassword`, `RoleID`) VALUES ( ?, ?, ?)";
-            stmt = con.prepareStatement(query2);
-            stmt.setString(1, facultyName);
-            stmt.setString(2, rolePassword);
-            stmt.setString(3, roleName);
-            int rs2 = stmt.executeUpdate();
-            if(rs2>0){
-               credentialsFlag = true;
-            }
-            if(roleFlag && credentialsFlag){
-                %>
-                <script>
-                    showToast("Role added successfully", "success");
-                    document.getElementById("FormRole").reset()
-                </script>
-                <%
-                roleFlag = credentialsFlag = false;
 
+            else{
+                String query = "INSERT INTO `faculty_has_roles` (`RoleID`, `FacultyID`) VALUES (?, ?)";
+                stmt = con.prepareStatement(query);
+                stmt.setString(1, roleName);
+                stmt.setString(2, facultyName);
+                int rs = stmt.executeUpdate();
+
+                boolean roleFlag = false;
+                boolean credentialsFlag = false;
+
+                if(rs>0){
+                    roleFlag = true;
+                }
+                String query2 = "INSERT INTO `credentials` ( `FacultyID`, `FacultyPassword`, `RoleID`) VALUES ( ?, ?, ?)";
+                stmt = con.prepareStatement(query2);
+                stmt.setString(1, facultyName);
+                stmt.setString(2, rolePassword);
+                stmt.setString(3, roleName);
+                int rs2 = stmt.executeUpdate();
+                if(rs2>0){
+                credentialsFlag = true;
+                }
+                if(roleFlag && credentialsFlag){
+                    %>
+                    <script>
+                        showToast("Role added successfully", "success");
+                        document.getElementById("FormRole").reset()
+                    </script>
+                    <%
+                    roleFlag = credentialsFlag = false;
+
+                }
             }
         } catch(SQLException e) {
             %>

@@ -61,7 +61,7 @@ function validateAndSubmit(formId) {
 function showToast(message, type) {
     Toastify({
         text: message,
-        duration: 3000,
+        duration: 4000,
         gravity: "top", // top, bottom
         position: "right", // left, center, right
         backgroundColor: type === "success" ? "green" : "red",

@@ -1,51 +1,52 @@
 <%@ page import="java.sql.*" %>
 <%@ page language="java" contentType="text/html" %>
 <%@ page errorPage="../exception.jsp" %>
-<%@ include file="../cache.jsp" %>  
+<%@ include file="../cache.jsp" %> 
+
 
 <%
 String user = (String) session.getAttribute("userID");
 int role = (int) session.getAttribute("role");
-String FacultyName = "";
-String FacultyDesignation = "";
-String FacultyContact = "";
-String FacultyEmail = "";
-int FacultyExperience = 0;
-String Dept = "";
-
+String FacultyName="";
+String FacultyDesignation="";
+String FacultyContact="";
+String FacultyEmail="";
+int FacultyExperience=0;
+String Dept="";
 Connection con = null;
 PreparedStatement stmt = null;
 ResultSet rs = null;
-
-if (user == null) {
-    response.sendRedirect("../index.jsp");
-} else {
-    if (role != 2) {
-%>
-        <script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function () {
-                toastr.error("YOU DON'T HAVE ACCESS TO THIS PAGE");
-                setTimeout(() => {
-                    window.location.href = "../logout.jsp";
-                }, 2000);
-            });
-        </script>
-<%
+    if (user == null) {
+        response.sendRedirect("../index.jsp");
     } else {
+        if(role != 2){
+            %>
+                    <script type="text/javascript">
+                    document.addEventListener("DOMContentLoaded", function() {
+                        toastr.error("YOU DONT HAVE ANY ACCESS TO THIS PAGE");});
+                        setTimeout(() => {
+                            window.location.href = "../logout.jsp";
+                        }, 2000);
+                    </script>
+                    <%
+                
+                } else {
+
+
         try {
             con = (Connection) session.getAttribute("dbConnection");
             if (con == null) {
-%>
+                %>
                 <script type="text/javascript">
-                    document.addEventListener("DOMContentLoaded", function () {
-                        toastr.error("Database is not connected!!!");
-                    });
+                document.addEventListener("DOMContentLoaded", function() {
+                    toastr.error("Database is not connected!!!");});
                 </script>
-<%
+                <%
             }
+            
 
-            // Fetch Faculty Details
-            String facultyProfile = "SELECT f.FacultyID, f.FacultyName, d.DepartmentName, f.FacultyDesignation, f.FacultyExperience, f.FacultyContact, f.FacultyEmail FROM faculty f JOIN department d ON f.DepartmentID = d.DepartmentID WHERE FacultyID=?";
+            // Query 1: Fetch faculty details
+            String facultyProfile = "SELECT f.FacultyID, f.FacultyName, d.DepartmentName, f.FacultyDesignation, f.FacultyExperience, f.FacultyContact, f.FacultyEmail From faculty f JOIN department d ON f.DepartmentID = d.DepartmentID where FacultyID=?";
             stmt = con.prepareStatement(facultyProfile);
             stmt.setString(1, user);
             rs = stmt.executeQuery();
@@ -59,31 +60,30 @@ if (user == null) {
                 Dept = rs.getString("DepartmentName");
             }
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
 %>
             <script type="text/javascript">
-                document.addEventListener("DOMContentLoaded", function () {
+                document.addEventListener("DOMContentLoaded", function() {
                     toastr.error("<%= e.getMessage() %>");
                 });
             </script>
 <%
-        }
+        } 
     }
-}
+    }
 %>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile & Update Password</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="../src/js/scripts.js"></script>
-
+    <title>Junior Assistant Profile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -251,22 +251,45 @@ if (user == null) {
         }
     </style>
 
+    <!-- Include toastr CSS -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+            <!-- Include jQuery -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+            <!-- Include toastr JS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+            <script src="../src/js/scripts.js"></script>
+ 
+ <!-- Include Toastify CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+<!-- Include Toastify JS -->
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./junior-script.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("facultyID").innerText = "ID: " + "<%=user%>";
-            document.getElementById("name").innerText = " " + "<%=FacultyName%>";
-            document.getElementById("change").addEventListener("click", function () {
-                document.getElementById("profile").style.display = "none";
-                document.getElementById("updatePass").style.display = "block";
+        document.addEventListener("DOMContentLoaded", function() {
+            var FacultyName = "<%= FacultyName %>";
+            var FacultyDesignation = "<%= FacultyDesignation %>";
+            var FacultyContact = "<%= FacultyContact %>";
+            var FacultyExperience = <%= FacultyExperience %>;
+            var FacultyEmail = "<%= FacultyEmail %>";
+            var Department = "<%= Dept %>";
+            var FacultyID = "<%= user %>";
 
-            });
+            document.getElementById("facultyID").innerText = "ID: " + FacultyID;
+            document.getElementById("name").innerText = " " + FacultyName;
+            document.getElementById("email").innerText = " " + FacultyEmail;
+            document.getElementById("phone").innerText = " "+FacultyContact;
+            document.getElementById("dept").innerText = " " + Department;
+            document.getElementById("des").innerText = " " + FacultyDesignation;
+            document.getElementById("exp").innerText = " " + FacultyExperience + " years";
         });
     </script>
 </head>
-
 <body>
-    <div class="navbar">
+     <div class="navbar">
         <div class="nav-left">
             <a href="JAHome.jsp">Home</a>
             <a href="add.jsp">Add Faculty</a>
@@ -279,7 +302,7 @@ if (user == null) {
             <button id="logout" style="background: #004080; border: none; color: inherit; cursor: pointer; font: inherit; padding: 1px 10px;">Logout</button>
         </div>
     </div>
-    <!-- Profile Section -->
+    </div>
     <div class="profile-container" id="profile">
         <div class="profile">
             <img src="https://www.pngmart.com/files/23/Profile-PNG-Photo.png" alt="Faculty Photo">
@@ -287,68 +310,94 @@ if (user == null) {
             <h3 style="color: black;border-bottom:none;font-weight:normal" id="facultyID"></h3> 
         </div>
         <div class="profile-info">
-            <h3>Faculty Profile</h3>
-            <p><strong>Email:</strong> <%= FacultyEmail %></p>
-            <p><strong>Phone:</strong> <%= FacultyContact %></p>
-            <p><strong>Department:</strong> <%= Dept %></p>
-            <p><strong>Designation:</strong> <%= FacultyDesignation %></p>
-            <p><strong>Experience:</strong> <%= FacultyExperience %> years</p>
-            <button id="change" class="btn btn-danger">Update Password</button>
-        </div>
-    </div>
+            <div class="updatePassword" style="display: flex;justify-content: space-between;">
+                <h3>Basic Information </h3>       
+                <button type="button" id="change" class="btn btn-danger">update password</button>  
+            </div>
+            <p><strong>Email:</strong> <var id="email"></var></p>
+            <p><strong>Phone:</strong><var id="phone"></var></p>
+            <p><strong>Department:</strong><var id="dept"></var></p>
+            <p><strong>Experience:</strong><var id="exp"></var></p>
+            <p><strong>Designation:</strong><var id="des"></var></p>
 
-    <!-- Password Update Form -->
-    <div class="form-container" id="updatePass">
-        <h2>Update Password</h2>
-        <form method="post" style="display: flex;flex-direction: column;flex-wrap: wrap;">
-            <label>Old Password:</label>
-            <input type="password" name="oldPassword" required>
-            <label>New Password:</label>
-            <input type="password" name="NewPassword" required>
-            <label>Re-enter Password:</label>
-            <input type="password" name="RenterPassword" required>
-            <button type="submit" style="margin: auto;margin-top: 2%;" class="btn btn-primary" name="pass" value="change">Change Password</button>
-        </form>
+        </div>
+        
     </div>
+    <div class="form-container" id="updatePass" method="post" action="">
+            <h2>Update Password</h2>
+            <form id="formIns">
+
+                <div class="input-group">
+                    <label>Old Password:</label>
+                    <input type="password" id="facultyPassword" name="oldPassword" required>
+                </div>
+
+                <div class="input-group">
+                    <label>New Password:</label>
+                    <input type="password" id="newPassword" name="NewPassword" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Re Password:</label>
+                    <input type="password" id="retypePassword" name="RenterPassword" required>
+                </div>
+    
+                <div class="submit-div">
+                    <button type="submit" id="submit-btn" class="submit-btn" name="pass" value="change">change password</button>
+                </div>
+            </form>
+        </div>
 </body>
 </html>
-
 <%
-if ("change".equals(request.getParameter("pass"))) {
+out.println("<script>"+
+    "document.addEventListener('DOMContentLoaded', function() {"+
+        "document.getElementById('change').addEventListener('click', function(event) {"+
+            "event.preventDefault(); "+
+                "document.getElementById('updatePass').style.display = 'block';"+
+                "document.getElementById('profile').style.display = 'none';"+
+            "});});"+
+"</script>");
+String button = request.getParameter("pass");
+if(button.equals("change")){
+
     String oldPassword = request.getParameter("oldPassword");
     String newPassword = request.getParameter("NewPassword");
     String retypePassword = request.getParameter("RenterPassword");
-
-    try {
-        if (newPassword.equals(retypePassword)) {
-            String passQuery = "SELECT * FROM credentials WHERE FacultyID = ? AND FacultyPassword = ? AND RoleID=?";
-            stmt = con.prepareStatement(passQuery);
+    try{
+        if(newPassword.equals(retypePassword)){
+            String PassQuery = "SELECT * FROM credentials where FacultyID = ? and FacultyPassword = ? and RoleID=? ";
+            stmt = con.prepareStatement(PassQuery);
             stmt.setString(1, user);
             stmt.setString(2, oldPassword);
             stmt.setInt(3, role);
-            rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                String updateQuery = "UPDATE credentials SET FacultyPassword = ? WHERE FacultyID = ? AND RoleID=?";
+            rs  = stmt.executeQuery();
+            if(rs.next()){
+                String updateQuery = "UPDATE credentials SET FacultyPassword = ? WHERE FacultyID = ? and RoleID=?";
                 stmt = con.prepareStatement(updateQuery);
                 stmt.setString(1, newPassword);
                 stmt.setString(2, user);
                 stmt.setInt(3, role);
-                int res = stmt.executeUpdate();
-
-                if (res > 0) {
-                    out.println("<script>toastr.success('Password updated successfully!');</script>");
-                } else {
-                    out.println("<script>toastr.error('Password update failed!');</script>");
+                int res = stmt.executeUpdate(); 
+                if(res > 0){
+                    out.println("<script>window.onload = function() {showToast('Password updated successfully!', 'success');};");
                 }
-            } else {
-                out.println("<script>toastr.error('Invalid old password!');</script>");
+                else{
+                    out.println("<script>window.onload = function() {showToast('Password update failed!', 'error');};");
+                }
             }
-        } else {
-            out.println("<script>toastr.error('Password mismatch!');</script>");
+            else{                
+            out.println("<script>window.onload = function() {showToast('Invalid old Password!','error');};");
+            }
+            
         }
-    } catch (Exception e) {
-        out.println("<script>toastr.error('Error: " + e.getMessage() + "');</script>");
+        else{
+                out.println("<script>window.onload = function() {toastr.error('Password mis-matched!');document.getElementById('retypePassword').style.border.color='red';};");
+            }
+        
+    }catch(Exception e){
+        out.println("<script>window.onload = function() {showToast('"+e.getMessage()+"','error');};");
+        session.setAttribute("catch",e.getMessage());
     }
 }
 %>
